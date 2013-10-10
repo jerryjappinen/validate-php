@@ -1,13 +1,7 @@
 <?php
 
 /**
-* Do basic validating routines
-*
-* NOTE
-* 	NULL is never valid input. Upon any invalid input, null is always returned.
-*
-* DEPENDENCIES
-*   - baseline.php
+* Main object for accessing validators
 */
 class Validator {
 

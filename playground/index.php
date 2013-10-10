@@ -11,7 +11,7 @@ mb_internal_encoding('UTF-8');
 */
 
 // Load from source
-require_once 'baseline.php';
+require_once '../baseline.php';
 foreach (rglob_files('../source/', 'php') as $file) {
 	require_once $file;
 }

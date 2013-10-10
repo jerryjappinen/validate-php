@@ -48,7 +48,7 @@ if (is_dir($dir) or is_file($dir.'.php')) {
 	try {
 
 		// Load SimpleTest
-		require_once 'baseline.php';
+		require_once '../baseline.php';
 		require_once $simpletestPath.'autorun.php';
 
 		// Load Source

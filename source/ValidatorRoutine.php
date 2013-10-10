@@ -1,10 +1,7 @@
 <?php
 
 /**
-* Do basic validating routines
-*
-* DEPENDENCIES
-*   - baseline.php
+* Basics for all validator routines
 */
 class ValidatorRoutine {
 
@@ -23,7 +20,9 @@ class ValidatorRoutine {
 	/**
 	* Validation cycle
 	*
-	* NULL is never valid input. Upon any invalid input, null is always returned.
+	* NOTE
+	*
+	* null is never valid input. Upon any invalid input, null is always returned.
 	*/
 	public function validate ($input) {
 		$result = null;

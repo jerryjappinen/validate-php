@@ -13,45 +13,21 @@ date_default_timezone_set('UTC');
 
 // Basic variables
 $root = '../';
-$readmePath = $root.'readme.txt';
 $sourcePath = $root.'source/';
-$exportPath = $root.'baseline.php';
+$exportPath = $root.'validate.php';
 
-
-
-// Find source files recursively
-function findSourceFilesRecursively ($root) {
-	$files = array();
-
-	// Files first
-	foreach (glob($root.'*') as $path) {
-		if (is_file($path)) {
-			$files[] = $path;
-		}
-	}
-
-	// Then subdirectories
-	foreach (glob($root.'*', GLOB_ONLYDIR) as $path) {
-		$path = $path.'/';
-		if (is_dir($path)) {
-			$files = array_merge($files, findSourceFilesRecursively($path));
-		}
-	}
-
-	return $files;
-}
-
-
-
-// Something little for parsing
+// Something for parsing
 $prefix = '<?php';
 $suffix = '?>';
 $prefixLength = strlen($prefix);
 $suffixLength = strlen($suffix);
 
+// Helpers
+require_once '../baseline.php';
+
 // Go through all source files
 $output = '';
-foreach (findSourceFilesRecursively($sourcePath) as $file) {
+foreach (rglob_files($sourcePath, 'php') as $file) {
 	$fileContents = file_get_contents($file);
 
 	// Remove PHP start tag
@@ -69,12 +45,10 @@ foreach (findSourceFilesRecursively($sourcePath) as $file) {
 }
 
 // Wrap output in PHP tags, add comments
-$readme = trim(file_get_contents($readmePath));
-$title = substr($readme, 0, strpos($readme, "\n"));
 $output = '<?php
 
 /**
-* '.(stripos($title, 'baseline') === false ? 'Baseline.php' : $title).'
+* Validate.php
 *
 * Released under MIT License
 * Authored by Jerry Jäppinen
@@ -82,6 +56,11 @@ $output = '<?php
 * eiskis@gmail.com
 *
 * Compiled from source on '.date('Y-m-d H:i e') .'
+*
+* DEPENDENCIES
+*
+* baseline.php (included)
+*   - http://eiskis.net/baseline-php/
 */
 
 
