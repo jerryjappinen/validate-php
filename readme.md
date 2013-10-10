@@ -1,7 +1,7 @@
 
 # Validate PHP
 
-Simple input validator/sanitizer for real life. In PHP. Released under MIT.
+Simple input validator/sanitizer for real life use. Written in PHP, released under MIT.
 
 ### Intro, download, docs & source
 
