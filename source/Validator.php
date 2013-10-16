@@ -9,6 +9,7 @@ class Validator {
 	* Available items
 	*/
 
+	// Can I automate this?
 	private $availableList = array(
 		'string',
 			'base64',
@@ -19,10 +20,11 @@ class Validator {
 			'queue',
 	);
 
-	public function available ($assert = null) {
+	// List available routines, or check if a specific one is available
+	public function available ($routine = null) {
 		$list = $this->availableList;
-		if ($assert) {
-			return in_array($assert, $list);
+		if ($routine) {
+			return in_array($routine, $list);
 		}
 		return $list;
 	}
@@ -31,49 +33,18 @@ class Validator {
 
 	/**
 	* Interface
+	*
+	* We expect users to call a validation routine by default
 	*/
-	public function string ($input) {
-		return $this->validate('string', $input);
+	public function __call ($routine, $arguments) {
+		if ($this->available($routine)) {
+			array_unshift($arguments, $routine);
+			return call_user_func_array(array($this, 'validate'), $arguments);
+		} else {
+			throw new Exception('Unavailable');
+			
+		}
 	}
-	public function passesAsString ($input) {
-		return $this->passes('string', $input);
-	}
-		public function base64 ($input) {
-			return $this->validate('base64', $input);
-		}
-		public function passesAsBase64 ($input) {
-			return $this->passes('base64', $input);
-		}
-		public function fulltext ($input) {
-			return $this->validate('fulltext', $input);
-		}
-		public function passesAsFulltext ($input) {
-			return $this->passes('fulltext', $input);
-		}
-		public function oneliner ($input) {
-			return $this->validate('oneliner', $input);
-		}
-		public function passesAsOneliner ($input) {
-			return $this->passes('oneliner', $input);
-		}
-	public function hash ($input) {
-		return $this->validate('hash', $input);
-	}
-	public function passesAsHash ($input) {
-		return $this->passes('hash', $input);
-	}
-		public function flathash ($input) {
-			return $this->validate('flathash', $input);
-		}
-		public function passesAsFlathash ($input) {
-			return $this->passes('flathash', $input);
-		}
-		public function queue ($input) {
-			return $this->validate('queue', $input);
-		}
-		public function passesAsQueue ($input) {
-			return $this->passes('queue', $input);
-		}
 
 
 
