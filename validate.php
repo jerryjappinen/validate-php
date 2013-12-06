@@ -8,7 +8,7 @@
 * http://eiskis.net/
 * eiskis@gmail.com
 *
-* Compiled from source on 2013-10-10 14:14 UTC
+* Compiled from source on 2013-12-05 23:35 UTC
 *
 * DEPENDENCIES
 *
@@ -27,20 +27,23 @@ class Validator {
 	* Available items
 	*/
 
+	// Can I automate this?
 	private $availableList = array(
 		'string',
 			'base64',
 			'fulltext',
 			'oneliner',
+			'id',
 		'hash',
 			'flathash',
 			'queue',
 	);
 
-	public function available ($assert = null) {
+	// List available routines, or check if a specific one is available
+	public function available ($routine = null) {
 		$list = $this->availableList;
-		if ($assert) {
-			return in_array($assert, $list);
+		if ($routine) {
+			return in_array($routine, $list);
 		}
 		return $list;
 	}
@@ -49,49 +52,18 @@ class Validator {
 
 	/**
 	* Interface
+	*
+	* We expect users to call a validation routine by default
 	*/
-	public function string ($input) {
-		return $this->validate('string', $input);
+	public function __call ($routine, $arguments) {
+		if ($this->available($routine)) {
+			array_unshift($arguments, $routine);
+			return call_user_func_array(array($this, 'validate'), $arguments);
+		} else {
+			throw new Exception('Unavailable');
+			
+		}
 	}
-	public function passesAsString ($input) {
-		return $this->passes('string', $input);
-	}
-		public function base64 ($input) {
-			return $this->validate('base64', $input);
-		}
-		public function passesAsBase64 ($input) {
-			return $this->passes('base64', $input);
-		}
-		public function fulltext ($input) {
-			return $this->validate('fulltext', $input);
-		}
-		public function passesAsFulltext ($input) {
-			return $this->passes('fulltext', $input);
-		}
-		public function oneliner ($input) {
-			return $this->validate('oneliner', $input);
-		}
-		public function passesAsOneliner ($input) {
-			return $this->passes('oneliner', $input);
-		}
-	public function hash ($input) {
-		return $this->validate('hash', $input);
-	}
-	public function passesAsHash ($input) {
-		return $this->passes('hash', $input);
-	}
-		public function flathash ($input) {
-			return $this->validate('flathash', $input);
-		}
-		public function passesAsFlathash ($input) {
-			return $this->passes('flathash', $input);
-		}
-		public function queue ($input) {
-			return $this->validate('queue', $input);
-		}
-		public function passesAsQueue ($input) {
-			return $this->passes('queue', $input);
-		}
 
 
 
@@ -244,7 +216,27 @@ class HashValidatorRoutine extends ValidatorRoutine {
 	* Turn input into array if it makes sense
 	*/
 	protected function normalizeType ($input) {
-		return to_array($input);
+
+		if (is_string($input)) {
+
+			// Parse as JSON
+			// FLAG Validator should include JSON with normalizations
+			$temp = json_decode(suffix(prefix($input, '{'), '}'));
+			if (is_array($temp)) {
+				$input = $temp;
+
+			// Comma-separated list
+			} else {
+				$input = $this->parseStringIntoArray($input);
+			}
+
+
+		// Last resort
+		} else {
+			$input = to_array($input);
+		}
+
+		return $input;
 	}
 
 
@@ -257,6 +249,53 @@ class HashValidatorRoutine extends ValidatorRoutine {
 	}
 
 
+
+	/**
+	* Decodes a string into an array (probably from GET)
+	*
+	* NOTE
+	*   - takes in JSON or "key:value,anotherKey:value;nextSetOfValues;lastSetA,lastSetB"
+	*/
+	private function parseStringIntoArray ($input) {
+		$input = trim($input);
+		$result = array();
+
+		// Iterate through all the values/key-value pairs
+		foreach (explode(';', $input) as $key => $value) {
+
+			// Individual value
+			if (strpos($value, ',') === false and strpos($value, ':') === false) {
+				$result[$key] = trim($value);
+
+			// List
+			} else {
+				foreach (explode(',', $value) as $key2 => $value2) {
+
+					$value2 = trim($value2, '"');
+
+					// Key-value pair
+					if (strpos($value2, ':') !== false) {
+						$temp2 = explode(':', $value2);
+						$result[$key][$temp2[0]] = $temp2[1];
+
+					// Plain value
+					} else {
+						$result[$key][$key2] = $value2;
+					}
+
+				}
+			}
+		}
+
+		// FLAG I'm looping the results twice
+		foreach ($result as $key => $value) {
+			if (is_string($value) and empty($value)) {
+				unset($result[$key]);
+			}
+		}
+
+		return $result;
+	}
 
 }
 
@@ -405,6 +444,30 @@ class FulltextValidatorRoutine extends StringValidatorRoutine {
 	*/
 	protected function sanitizeInput ($input) {
 		return trim_text($input);
+	}
+
+
+
+}
+
+
+
+/**
+* ID (extend Strings)
+*
+* RESULT
+* 	Type: String
+* 	Stripped: all whitespace
+*/
+class IdValidatorRoutine extends StringValidatorRoutine {
+
+
+
+	/**
+	* Trim all whitespace
+	*/
+	protected function sanitizeInput ($input) {
+		return trim_whitespace($input);
 	}
 
 

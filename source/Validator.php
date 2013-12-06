@@ -15,6 +15,7 @@ class Validator {
 			'base64',
 			'fulltext',
 			'oneliner',
+			'id',
 		'hash',
 			'flathash',
 			'queue',
