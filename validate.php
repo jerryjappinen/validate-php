@@ -8,7 +8,7 @@
 * http://eiskis.net/
 * eiskis@gmail.com
 *
-* Compiled from source on 2013-12-05 23:35 UTC
+* Compiled from source on 2013-12-10 09:23 UTC
 *
 * DEPENDENCIES
 *
@@ -31,9 +31,10 @@ class Validator {
 	private $availableList = array(
 		'string',
 			'base64',
+			'id',
+			'email',
 			'fulltext',
 			'oneliner',
-			'id',
 		'hash',
 			'flathash',
 			'queue',
@@ -422,6 +423,39 @@ class Base64ValidatorRoutine extends StringValidatorRoutine {
 	protected function validInput ($input) {
 		return base64_decode($input, true) === false ? false : true;
 	}
+
+
+}
+
+
+
+/**
+* Email (extend Strings)
+*
+* RESULT
+* 	Type: String
+* 	Stripped: all whitespace
+*/
+class EmailValidatorRoutine extends StringValidatorRoutine {
+
+
+
+	/**
+	* Trim all whitespace
+	*/
+	protected function sanitizeInput ($input) {
+		return trim_whitespace($input);
+	}
+
+
+
+	/**
+	* Must match email address format
+	*/
+	protected function validInput ($input) {
+		return preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/', $input);
+	}
+
 
 
 }

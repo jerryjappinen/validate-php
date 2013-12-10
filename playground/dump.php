@@ -10,9 +10,12 @@ adsdsaasdd as       daop asdkps adpokasdpkads
 	ads as dasasd     asddasda 		  asddads 	
 dadsa';
 
+$string = 'foo@bar.com';
+
 $dump = array(
 
-	$validate->base64($string),
+	$validate->email($string),
+	// $validate->base64($string),
 	// $validate->string($string),
 	// $validate->fulltext($string),
 	// $validate->oneliner($string),
