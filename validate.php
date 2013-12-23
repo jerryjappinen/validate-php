@@ -8,7 +8,7 @@
 * http://eiskis.net/
 * eiskis@gmail.com
 *
-* Compiled from source on 2013-12-10 09:23 UTC
+* Compiled from source on 2013-12-23 09:49 UTC
 *
 * DEPENDENCIES
 *
@@ -38,6 +38,7 @@ class Validator {
 		'hash',
 			'flathash',
 			'queue',
+				'ids',
 	);
 
 	// List available routines, or check if a specific one is available
@@ -389,6 +390,49 @@ class QueueValidatorRoutine extends HashValidatorRoutine {
 	*/
 	protected function sanitizeInput ($input) {
 		return array_flatten($input);
+	}
+
+
+
+}
+
+
+
+/**
+* List of IDs
+*
+* RESULT
+* 	Type: Array
+*   Stripped: Child arrays, keys; each item validated for ID
+*/
+class IdsValidatorRoutine extends QueueValidatorRoutine {
+
+
+
+	// Child validator
+	private $validate = null;
+	public function __construct () {
+		$this->validate = new Validator();
+		return $this;
+	}
+
+
+
+	/**
+	* Children are normalized, keys are removed
+	*/
+	protected function sanitizeInput ($input) {
+
+		// Sanitize all children
+		$result = array();
+		foreach (array_flatten($input) as $value) {
+			$value = $this->validate->id($value);
+			if ($value) {
+				$result[] = $value;
+			}
+		}
+
+		return $result;
 	}
 
 

@@ -81,7 +81,7 @@ echo '
 
 		<h2>Tasks</h2>
 
-		<p>Automated tests can be run at <a href="tests/" target="_blank">tests/</a>. You can also <a href="compile/" target="_blank">compile/</a> validate.php from the source files, or play around in the <a href="playground/">playground</a>.</p>
+		<p>Automated tests can be run at <a href="tests/" target="_blank">tests/</a>. You can also <a href="compile/" target="_blank">compile/</a> validate.php from the source files, or play around in the <a href="playground/" target="_blank">playground</a>.</p>
 
 		<h2>Validators available for</h2>
 		<ul>

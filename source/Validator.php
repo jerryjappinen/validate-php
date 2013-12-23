@@ -20,6 +20,7 @@ class Validator {
 		'hash',
 			'flathash',
 			'queue',
+				'ids',
 	);
 
 	// List available routines, or check if a specific one is available
