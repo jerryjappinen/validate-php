@@ -13,9 +13,10 @@ class Validator {
 	private $availableList = array(
 		'string',
 			'base64',
-			'id',
 			'email',
 			'fulltext',
+			'id',
+			'json',
 			'oneliner',
 		'hash',
 			'flathash',
