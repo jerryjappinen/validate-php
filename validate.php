@@ -8,7 +8,7 @@
 * http://eiskis.net/
 * eiskis@gmail.com
 *
-* Compiled from source on 2013-12-23 09:49 UTC
+* Compiled from source on 2013-12-23 10:16 UTC
 *
 * DEPENDENCIES
 *
@@ -31,9 +31,10 @@ class Validator {
 	private $availableList = array(
 		'string',
 			'base64',
-			'id',
 			'email',
 			'fulltext',
+			'id',
+			'json',
 			'oneliner',
 		'hash',
 			'flathash',
@@ -222,8 +223,12 @@ class HashValidatorRoutine extends ValidatorRoutine {
 		if (is_string($input)) {
 
 			// Parse as JSON
-			// FLAG Validator should include JSON with normalizations
-			$temp = json_decode(suffix(prefix($input, '{'), '}'));
+			$temp = trim($temp);
+			$first = substr($temp, 0, 1);
+			if ($first !== '[' or $first !== '{') {
+				$temp = '{'.$temp.'}';
+			}
+			$temp = json_decode($temp);
 			if (is_array($temp)) {
 				$input = $temp;
 
@@ -546,6 +551,51 @@ class IdValidatorRoutine extends StringValidatorRoutine {
 	*/
 	protected function sanitizeInput ($input) {
 		return trim_whitespace($input);
+	}
+
+
+
+}
+
+
+
+/**
+* JSON (extends String)
+*
+* RESULT
+* 	Type: String, valid JSON
+*/
+class JsonValidatorRoutine extends StringValidatorRoutine {
+
+
+
+	/**
+	* Override String's type normalization
+	*/
+	protected function normalizeType ($input) {
+		return $input;
+	}
+	protected function validType ($input) {
+		return true;
+	}
+
+
+
+	/**
+	* Attempt to parse as JSON
+	*/
+	protected function sanitizeInput ($input) {
+		return json_encode($input);
+	}
+
+
+
+	/**
+	* Must be valid JSON
+	*/
+	protected function validInput ($input) {
+		$valid = json_decode($input);
+		return (json_last_error() == JSON_ERROR_NONE);
 	}
 
 
