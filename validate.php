@@ -8,7 +8,7 @@
 * http://eiskis.net/
 * eiskis@gmail.com
 *
-* Compiled from source on 2013-12-23 10:16 UTC
+* Compiled from source on 2013-12-24 12:01 UTC
 *
 * DEPENDENCIES
 *
@@ -223,7 +223,7 @@ class HashValidatorRoutine extends ValidatorRoutine {
 		if (is_string($input)) {
 
 			// Parse as JSON
-			$temp = trim($temp);
+			$temp = trim($input);
 			$first = substr($temp, 0, 1);
 			if ($first !== '[' or $first !== '{') {
 				$temp = '{'.$temp.'}';
