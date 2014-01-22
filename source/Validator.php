@@ -8,16 +8,6 @@ class Validator {
 
 
 	/**
-	* Constructor
-	*/
-
-	public function __construct () {
-		return $this;
-	}
-
-
-
-	/**
 	* Available items
 	*/
 
@@ -36,7 +26,21 @@ class Validator {
 				'ids',
 	);
 
-	// List available routines, or check if a specific one is available
+
+
+	/**
+	* Constructor
+	*/
+
+	public function __construct () {
+		return $this;
+	}
+
+
+
+	/**
+	* List available routines, or check if a specific one is available
+	*/
 	public function available ($routine = null) {
 		$list = $this->availableList;
 		if ($routine) {
