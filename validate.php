@@ -8,7 +8,7 @@
 * http://eiskis.net/
 * eiskis@gmail.com
 *
-* Compiled from source on 2013-12-24 12:01 UTC
+* Compiled from source on 2014-01-22 08:04 UTC
 *
 * DEPENDENCIES
 *
@@ -22,6 +22,18 @@
 * Main object for accessing validators
 */
 class Validator {
+
+
+
+	/**
+	* Constructor
+	*/
+
+	public function __construct () {
+		return $this;
+	}
+
+
 
 	/**
 	* Available items

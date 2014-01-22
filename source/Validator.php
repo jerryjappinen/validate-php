@@ -5,6 +5,18 @@
 */
 class Validator {
 
+
+
+	/**
+	* Constructor
+	*/
+
+	public function __construct () {
+		return $this;
+	}
+
+
+
 	/**
 	* Available items
 	*/
