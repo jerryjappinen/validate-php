@@ -5,11 +5,11 @@ Simple input validator/sanitizer for real life use. Written in PHP, released und
 
 ### Intro, download, docs & source
 
-- [bitbucket.org/Eiskis/validate-php](http://bitbucket.org/Eiskis/validate-php/)
+- [https://github.com/Eiskis/Validate-PHP](https://github.com/Eiskis/Validate-PHP)
 
 ### By Jerry Jäppinen
 
 - eiskis@gmail.com
 - http://eiskis.net/
-- @Eiskis
+- [@Eiskis](https://twitter.com/Eiskis)
 
